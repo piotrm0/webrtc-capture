@@ -22,8 +22,6 @@
 	      video: true,
 	      audio: false
 	  }).then(function(stream) {
-	      console.log("setting video stream");
-	      console.log(stream);
 	      video.srcObject = stream;
 	      video.play();
 	  }).catch(function(err) {
@@ -65,7 +63,7 @@
   <body>
     <button id="button">Capture</button>
     <div class="camera">
-      <video id="video">Video stream not available.</video>
+      <video id="video" class="video">Video stream not available.</video>
     </div>
     <canvas id="canvas" class="canvas">
     </canvas>
