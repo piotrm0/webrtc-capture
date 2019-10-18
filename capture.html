@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script>
+
+      var video = null;
+      var canvas = null;
+      var button = null;
+
+      function startup() {
+	  video = document.getElementById('video');
+	  canvas = document.getElementById('canvas');
+	  button = document.getElementById('button');
+
+	  video.setAttribute('width', 640);
+	  video.setAttribute('height', 480);
+	  canvas.setAttribute('width', 640);
+	  canvas.setAttribute('height', 480);
+
+	  navigator.mediaDevices.getDisplayMedia({
+	      video: true,
+	      audio: false
+	  }).then(function(stream) {
+	      console.log("setting video stream");
+	      console.log(stream);
+	      video.srcObject = stream;
+	      video.play();
+	  }).catch(function(err) {
+	      console.log("An error occurred: " + err);
+	  });
+
+	  button.addEventListener('click', function(ev){
+	      capture();
+	      ev.preventDefault();
+	  }, false);
+      }
+
+      function capture() {
+	  var context = canvas.getContext('2d');
+	  context.drawImage(video, 0, 0, video.width, video.height);
+
+	  var data = canvas.toDataURL('image/png');
+	  $.post("", {data: data}, function (data, status) {});
+      }
+
+      window.addEventListener('load', startup, false);
+
+    </script>
+    <style type="text/css">
+      .camera {
+	  width: 640px;
+	  height: 480px;
+	  border: 1px solid black;
+	  padding: 10px;
+	  margin: 10px;
+      }
+      .canvas {
+	  border: 1px solid black;
+	  padding: 10px;
+	  margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="button">Capture</button>
+    <div class="camera">
+      <video id="video">Video stream not available.</video>
+    </div>
+    <canvas id="canvas" class="canvas">
+    </canvas>
+  </body>
+</html>
